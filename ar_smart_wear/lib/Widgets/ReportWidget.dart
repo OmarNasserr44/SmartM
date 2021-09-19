@@ -16,9 +16,9 @@ class ReportWidget extends StatelessWidget {
 
   final Size screenSize;
   final int height;
-  final int neck;
-  final int chest;
-  final int shoulder;
+  final double neck;
+  final double chest;
+  final double shoulder;
   final File image;
 
   @override
@@ -26,12 +26,6 @@ class ReportWidget extends StatelessWidget {
     return Container(
       height: screenSize.height / 1.5,
       width: screenSize.width / 1.05,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(
-            color: Colors.blue,
-            width: screenSize.width / 45,
-          )),
       child: Row(
         children: [
           SizedBox(
@@ -41,7 +35,7 @@ class ReportWidget extends StatelessWidget {
             children: [
               NumBelowText(
                 screenSize: screenSize,
-                height: height,
+                height: height.toDouble(),
                 text: "Height",
               ),
               NumBelowText(screenSize: screenSize, height: neck, text: "Neck"),

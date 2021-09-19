@@ -11,7 +11,7 @@ class NumBelowText extends StatelessWidget {
   }) : super(key: key);
 
   final Size screenSize;
-  final int height;
+  final double height;
   final String text;
 
   @override

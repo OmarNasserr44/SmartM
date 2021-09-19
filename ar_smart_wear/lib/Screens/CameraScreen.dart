@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:ar_smart_wear/Screens/BodyMeasurementsScreen.dart';
 import 'package:ar_smart_wear/Widgets/CustButton.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
@@ -28,6 +30,22 @@ class _CameraScreenState extends State<CameraScreen> {
 
   List _recognitions;
 
+  PoseLandmark shirtRightShoulderCoordinates;
+  PoseLandmark shirtLeftShoulderCoordinates;
+  PoseLandmark leftHipCoordinate;
+  PoseLandmark rightHipCoordinate;
+  double distanceBetween2ShouldersInPixels = 0;
+  double distanceBetLeftHipAndShoulderInPixels = 0;
+  double distanceBetRightHipAndShoulderInPixels = 0;
+  double boundingBoxHeightInPixels = 0;
+  double boundingBoxWidthInPixels = 0;
+
+  double factorX;
+  double factorY;
+
+  double leftPositionedShirt;
+  double topPositionedShirt;
+
   @override
   void initState() {
     super.initState();
@@ -45,7 +63,6 @@ class _CameraScreenState extends State<CameraScreen> {
     try {
       String res;
       if (_model == yolo) {
-        print("INSIDE YOLOO");
         res = await Tflite.loadModel(
           model: "assets/tflite/yolov2_tiny.tflite",
           labels: "assets/tflite/yolov2_tiny.txt",
@@ -74,6 +91,7 @@ class _CameraScreenState extends State<CameraScreen> {
       _busy = true;
     });
     predictImage(File(image.path));
+    detectPose(File(image.path));
   }
 
   predictImage(File image) async {
@@ -131,17 +149,77 @@ class _CameraScreenState extends State<CameraScreen> {
     });
   }
 
+  detectPose(File image) async {
+    final inputImage = InputImage.fromFile(image);
+    final poseDetector = GoogleMlKit.vision.poseDetector();
+    final List<Pose> poses = await poseDetector.processImage(inputImage);
+
+    for (Pose pose in poses) {
+      // to access specific landmarks
+      //getting both shoulders coordinates so we can adjust the shirt relatively with 2D position
+      shirtLeftShoulderCoordinates =
+          pose.landmarks[PoseLandmarkType.leftShoulder];
+      shirtRightShoulderCoordinates =
+          pose.landmarks[PoseLandmarkType.rightShoulder];
+      leftHipCoordinate = pose.landmarks[PoseLandmarkType.leftHip];
+      rightHipCoordinate = pose.landmarks[PoseLandmarkType.rightHip];
+    }
+    print(
+        "distance from top ${shirtRightShoulderCoordinates.x}   ${shirtRightShoulderCoordinates.y}");
+    print(
+        "distance from top ${shirtLeftShoulderCoordinates.x}   ${shirtLeftShoulderCoordinates.y}");
+    //
+    //getting distance between the 2 shoulders points using their coordinates and distance bet 2 points law
+    //d=√((x2-x1)²+(y2-y1)²)
+    //considering the left shoulder to be x2 as on the coordinate it's further on the x-axis
+    //we will use the reference of the whole body height given in CMs to convert any pixels length to CMs
+    //
+    distanceBetween2ShouldersInPixels = distanceBet2Points(
+        shirtRightShoulderCoordinates.x,
+        shirtLeftShoulderCoordinates.x,
+        shirtRightShoulderCoordinates.y,
+        shirtLeftShoulderCoordinates.y);
+
+    //getting the distance between the start of the hip and the shoulder to determine the height of the container that
+    //will contain the shirt
+    distanceBetLeftHipAndShoulderInPixels = distanceBet2Points(
+        leftHipCoordinate.x,
+        shirtLeftShoulderCoordinates.x,
+        leftHipCoordinate.y,
+        shirtLeftShoulderCoordinates.y);
+
+    //
+    //we get both distances so we can assign our container height to fit the bigger distance
+    //
+    distanceBetRightHipAndShoulderInPixels = distanceBet2Points(
+        rightHipCoordinate.x,
+        shirtRightShoulderCoordinates.x,
+        rightHipCoordinate.y,
+        shirtRightShoulderCoordinates.y);
+  }
+
+  double distanceBet2Points(double x1, double x2, double y1, double y2) {
+    double distance = sqrt(pow((x2 - x1), 2) + pow((y2 - y1), 2));
+    return distance;
+  }
+
   List<Widget> renderBoxes(Size screen) {
     if (_recognitions == null) return [];
     if (_imageWidth == null || _imageHeight == null) return [];
 
-    double factorX = screen.width;
-    double factorY = _imageHeight / _imageWidth * screen.width;
-    print("FACTOR Y $factorY");
+    factorX = screen.width;
+    factorY = _imageHeight / _imageWidth * screen.width;
 
-    Color blue = Colors.red;
+    Color red = Colors.red;
 
     return _recognitions.map((re) {
+      setState(() {
+        boundingBoxHeightInPixels = re["rect"]["h"] * factorY;
+        boundingBoxWidthInPixels = re["rect"]["w"] * factorX;
+        leftPositionedShirt = re["rect"]["x"] * factorX;
+        topPositionedShirt = re["rect"]["y"] * factorY;
+        print("TOPPPP $topPositionedShirt");
+      });
       return Positioned(
         left: re["rect"]["x"] * factorX,
         top: re["rect"]["y"] * factorY,
@@ -150,13 +228,13 @@ class _CameraScreenState extends State<CameraScreen> {
         child: Container(
           decoration: BoxDecoration(
               border: Border.all(
-            color: blue,
+            color: red,
             width: 3,
           )),
           child: Text(
             "${re["detectedClass"]} ${(re["confidenceInClass"] * 100).toStringAsFixed(0)}%",
             style: TextStyle(
-              background: Paint()..color = blue,
+              background: Paint()..color = red,
               color: Colors.white,
               fontSize: 15,
             ),
@@ -233,6 +311,15 @@ class _CameraScreenState extends State<CameraScreen> {
                     MaterialPageRoute(
                         builder: (context) => BodyMeasurements(
                               image: _image,
+                              distBet2Shoulders: boundingBoxWidthInPixels,
+                              distBetLeftHipAndShoulder:
+                                  distanceBetLeftHipAndShoulderInPixels,
+                              distBetRightHipAndShoulder:
+                                  distanceBetRightHipAndShoulderInPixels,
+                              boundingBoxInPixels: boundingBoxHeightInPixels,
+                              rightShoulderXco: leftPositionedShirt,
+                              rightShoulderYco: shirtRightShoulderCoordinates.y,
+                              topPositionedShirt: topPositionedShirt,
                             )));
               }
             },

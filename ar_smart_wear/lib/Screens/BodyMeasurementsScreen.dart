@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ar_smart_wear/Screens/TryOutfitsScreen.dart';
 import 'package:ar_smart_wear/Widgets/CustButton.dart';
 import 'package:ar_smart_wear/Widgets/ReportWidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,21 +10,72 @@ import 'package:height_slider/height_slider.dart';
 class BodyMeasurements extends StatefulWidget {
   static const id = "Body Measurements";
   final File image;
+  final double distBet2Shoulders;
+  final double distBetLeftHipAndShoulder;
+  final double distBetRightHipAndShoulder;
+  final double boundingBoxInPixels;
+  final double rightShoulderXco;
+  final double rightShoulderYco;
+  final double topPositionedShirt;
 
-  const BodyMeasurements({this.image});
+  const BodyMeasurements({
+    this.image,
+    this.distBet2Shoulders,
+    this.distBetLeftHipAndShoulder,
+    this.distBetRightHipAndShoulder,
+    this.boundingBoxInPixels,
+    this.rightShoulderXco,
+    this.rightShoulderYco,
+    this.topPositionedShirt,
+  });
   @override
-  _BodyMeasurementsState createState() => _BodyMeasurementsState(image: image);
+  _BodyMeasurementsState createState() => _BodyMeasurementsState(
+        image: image,
+        boundingBoxInPixels: boundingBoxInPixels,
+        distBet2Shoulders: distBet2Shoulders,
+        distBetLeftHipAndShoulder: distBetLeftHipAndShoulder,
+        distBetRightHipAndShoulder: distBetRightHipAndShoulder,
+        rightShoulderXco: rightShoulderXco,
+        rightShoulderYco: rightShoulderYco,
+        topPositionedShirt: topPositionedShirt,
+      );
 }
 
 class _BodyMeasurementsState extends State<BodyMeasurements> {
-  final File image;
-  int height = 170;
-  int neck = 0;
-  int chest = 0;
-  int shoulder = 0;
-  bool gotHeight = false;
+  _BodyMeasurementsState(
+      {this.topPositionedShirt,
+      this.rightShoulderXco,
+      this.rightShoulderYco,
+      this.boundingBoxInPixels,
+      this.distBet2Shoulders,
+      this.distBetLeftHipAndShoulder,
+      this.distBetRightHipAndShoulder,
+      this.image});
 
-  _BodyMeasurementsState({this.image});
+  final File image;
+  final double distBet2Shoulders;
+  final double distBetLeftHipAndShoulder;
+  final double distBetRightHipAndShoulder;
+  final double boundingBoxInPixels;
+  final double rightShoulderXco;
+  final double rightShoulderYco;
+  final double topPositionedShirt;
+
+  //
+  int height = 170;
+  double neck = 0;
+  double chest = 0;
+  double shoulder = 0;
+  bool gotHeight = false;
+  //
+
+  double convertPixelsToCM(var cm1, double pixel_1, double pixel_2) {
+    print("CM1 $cm1 \nPX1 $pixel_1\nPX2 $pixel_2");
+    double cm2 = 0;
+    cm2 = (pixel_2 * cm1) / pixel_1;
+    return cm2.ceilToDouble();
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
@@ -42,7 +94,11 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
                   children: [
                     HeightSlider(
                       height: height,
-                      onChange: (val) => setState(() => height = val),
+                      onChange: (val) {
+                        setState(() {
+                          height = val;
+                        });
+                      },
                       unit: 'cm', // optional
                       maxHeight: 210,
                       currentHeightTextColor: Colors.red,
@@ -53,6 +109,9 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
                         child: CustButton(
                           onTap: () {
                             setState(() {
+                              chest = convertPixelsToCM(height,
+                                  boundingBoxInPixels, distBet2Shoulders);
+                              print("CHEST $chest cm");
                               gotHeight = true;
                             });
                           },
@@ -107,7 +166,25 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
                           screenSize: screenSize,
                           onTap: () {
                             setState(() {
-                              gotHeight = false;
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => TryOutfits(
+                                            image: image,
+                                            distBet2Shoulders:
+                                                distBet2Shoulders,
+                                            distBetHipsAndShoulders:
+                                                distBetRightHipAndShoulder >
+                                                        distBetLeftHipAndShoulder
+                                                    ? distBetRightHipAndShoulder
+                                                    : distBetLeftHipAndShoulder,
+                                            rightShoulderXco: rightShoulderXco,
+                                            rightShoulderYco: rightShoulderYco,
+                                            boundingBoxInPixels:
+                                                boundingBoxInPixels,
+                                            topPositionedShirt:
+                                                topPositionedShirt,
+                                          )));
                             });
                           },
                           text: "Try Outfits",
