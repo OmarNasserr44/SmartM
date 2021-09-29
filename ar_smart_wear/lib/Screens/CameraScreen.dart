@@ -37,6 +37,8 @@ class _CameraScreenState extends State<CameraScreen> {
   double distanceBetween2ShouldersInPixels = 0;
   double distanceBetLeftHipAndShoulderInPixels = 0;
   double distanceBetRightHipAndShoulderInPixels = 0;
+  double distanceBetTwoHipsInPixels = 0;
+  double distanceBetHipsAndFeet = 0;
   double boundingBoxHeightInPixels = 0;
   double boundingBoxWidthInPixels = 0;
 
@@ -154,6 +156,10 @@ class _CameraScreenState extends State<CameraScreen> {
     final poseDetector = GoogleMlKit.vision.poseDetector();
     final List<Pose> poses = await poseDetector.processImage(inputImage);
 
+    PoseLandmark leftKnee;
+    PoseLandmark rightKnee;
+    PoseLandmark rightAnkle;
+    PoseLandmark leftAnkle;
     for (Pose pose in poses) {
       // to access specific landmarks
       //getting both shoulders coordinates so we can adjust the shirt relatively with 2D position
@@ -163,11 +169,13 @@ class _CameraScreenState extends State<CameraScreen> {
           pose.landmarks[PoseLandmarkType.rightShoulder];
       leftHipCoordinate = pose.landmarks[PoseLandmarkType.leftHip];
       rightHipCoordinate = pose.landmarks[PoseLandmarkType.rightHip];
+      leftKnee = pose.landmarks[PoseLandmarkType.leftKnee];
+      rightKnee = pose.landmarks[PoseLandmarkType.rightKnee];
+      rightAnkle = pose.landmarks[PoseLandmarkType.rightAnkle];
+      leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle];
     }
-    print(
-        "distance from top ${shirtRightShoulderCoordinates.x}   ${shirtRightShoulderCoordinates.y}");
-    print(
-        "distance from top ${shirtLeftShoulderCoordinates.x}   ${shirtLeftShoulderCoordinates.y}");
+    print("RightHIP ${rightHipCoordinate.x}   ${rightHipCoordinate.y}");
+    print("LeftHIP ${leftHipCoordinate.x}   ${leftHipCoordinate.y}");
     //
     //getting distance between the 2 shoulders points using their coordinates and distance bet 2 points law
     //d=√((x2-x1)²+(y2-y1)²)
@@ -196,6 +204,19 @@ class _CameraScreenState extends State<CameraScreen> {
         shirtRightShoulderCoordinates.x,
         rightHipCoordinate.y,
         shirtRightShoulderCoordinates.y);
+
+    //
+    //getting distance between 2 hips so we can assign it to pants width
+    //
+    // distanceBetTwoHipsInPixels = distanceBet2Points(leftHipCoordinate.x,
+    //     rightHipCoordinate.x, leftHipCoordinate.y, rightHipCoordinate.y);
+    distanceBetTwoHipsInPixels =
+        distanceBet2Points(leftKnee.x, rightKnee.x, leftKnee.y, rightKnee.y);
+    print("DIIIIIS $distanceBetTwoHipsInPixels}");
+
+    //
+    distanceBetHipsAndFeet = distanceBet2Points(
+        leftHipCoordinate.x, leftAnkle.x, leftHipCoordinate.y, leftAnkle.y);
   }
 
   double distanceBet2Points(double x1, double x2, double y1, double y2) {
@@ -218,7 +239,6 @@ class _CameraScreenState extends State<CameraScreen> {
         boundingBoxWidthInPixels = re["rect"]["w"] * factorX;
         leftPositionedShirt = re["rect"]["x"] * factorX;
         topPositionedShirt = re["rect"]["y"] * factorY;
-        print("TOPPPP $topPositionedShirt");
       });
       return Positioned(
         left: re["rect"]["x"] * factorX,
@@ -320,6 +340,8 @@ class _CameraScreenState extends State<CameraScreen> {
                               rightShoulderXco: leftPositionedShirt,
                               rightShoulderYco: shirtRightShoulderCoordinates.y,
                               topPositionedShirt: topPositionedShirt,
+                              distanceBetTwoHips: distanceBetTwoHipsInPixels,
+                              distanceBetHipsAndFeet: distanceBetHipsAndFeet,
                             )));
               }
             },

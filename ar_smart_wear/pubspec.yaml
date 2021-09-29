@@ -54,7 +54,12 @@ flutter:
   assets:
     - assets/Images/man.png
     - assets/Images/woman.png
-    - assets/Images/tshirt.png
+    - assets/Images/emptyPNG.png
+    - assets/Images/menTop/jacket2.png
+    - assets/Images/menTop/open-jacket2.png
+    - assets/Images/menTop/white-shirt.png
+    - assets/Images/menBottom/black-p.png
+    - assets/Images/menBottom/black-p2.png
     - assets/tflite/ssd_mobilenet.tflite
     - assets/tflite/ssd_mobilenet.txt
     - assets/tflite/yolov2_tiny.tflite

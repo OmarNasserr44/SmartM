@@ -13,10 +13,12 @@ class BodyMeasurements extends StatefulWidget {
   final double distBet2Shoulders;
   final double distBetLeftHipAndShoulder;
   final double distBetRightHipAndShoulder;
+  final double distanceBetTwoHips;
   final double boundingBoxInPixels;
   final double rightShoulderXco;
   final double rightShoulderYco;
   final double topPositionedShirt;
+  final double distanceBetHipsAndFeet;
 
   const BodyMeasurements({
     this.image,
@@ -27,6 +29,8 @@ class BodyMeasurements extends StatefulWidget {
     this.rightShoulderXco,
     this.rightShoulderYco,
     this.topPositionedShirt,
+    this.distanceBetTwoHips,
+    this.distanceBetHipsAndFeet,
   });
   @override
   _BodyMeasurementsState createState() => _BodyMeasurementsState(
@@ -38,12 +42,16 @@ class BodyMeasurements extends StatefulWidget {
         rightShoulderXco: rightShoulderXco,
         rightShoulderYco: rightShoulderYco,
         topPositionedShirt: topPositionedShirt,
+        distanceBetTwoHips: distanceBetTwoHips,
+        distanceBetHipsAndFeet: distanceBetHipsAndFeet,
       );
 }
 
 class _BodyMeasurementsState extends State<BodyMeasurements> {
   _BodyMeasurementsState(
-      {this.topPositionedShirt,
+      {this.distanceBetHipsAndFeet,
+      this.distanceBetTwoHips,
+      this.topPositionedShirt,
       this.rightShoulderXco,
       this.rightShoulderYco,
       this.boundingBoxInPixels,
@@ -60,6 +68,8 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
   final double rightShoulderXco;
   final double rightShoulderYco;
   final double topPositionedShirt;
+  final double distanceBetTwoHips;
+  final double distanceBetHipsAndFeet;
 
   //
   int height = 170;
@@ -70,7 +80,6 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
   //
 
   double convertPixelsToCM(var cm1, double pixel_1, double pixel_2) {
-    print("CM1 $cm1 \nPX1 $pixel_1\nPX2 $pixel_2");
     double cm2 = 0;
     cm2 = (pixel_2 * cm1) / pixel_1;
     return cm2.ceilToDouble();
@@ -111,7 +120,6 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
                             setState(() {
                               chest = convertPixelsToCM(height,
                                   boundingBoxInPixels, distBet2Shoulders);
-                              print("CHEST $chest cm");
                               gotHeight = true;
                             });
                           },
@@ -184,6 +192,10 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
                                                 boundingBoxInPixels,
                                             topPositionedShirt:
                                                 topPositionedShirt,
+                                            distanceBetHipsAndFeet:
+                                                distanceBetHipsAndFeet,
+                                            distanceBetTwoHips:
+                                                distanceBetTwoHips,
                                           )));
                             });
                           },
