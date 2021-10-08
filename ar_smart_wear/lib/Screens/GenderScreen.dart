@@ -11,78 +11,101 @@ class GenderScreen extends StatefulWidget {
 }
 
 class _GenderScreenState extends State<GenderScreen> {
+  bool man = true;
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Text(
-              "Choose Your Gender",
-              style: GoogleFonts.gloriaHallelujah(
-                  fontSize: screenSize.width / 10,
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: screenSize.height / 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustButton(
-                  screenSize: screenSize,
-                  heightDiv: screenSize.width / 36,
-                  widthDiv: screenSize.width / 163.6363636,
-                  text: "Man",
-                  onTap: () {
-                    Navigator.pushNamed(context, CameraScreen.id);
-                  },
-                ),
-                SizedBox(
-                  width: screenSize.width / 20,
-                ),
-                CustButton(
-                  screenSize: screenSize,
-                  heightDiv: screenSize.width / 36, //10
-                  widthDiv: screenSize.width / 163.6363636, //2.2
-                  text: "Woman",
-                  onTap: () {
-                    Navigator.pushNamed(context, CameraScreen.id);
-                  },
-                ),
-              ],
-            ),
-            SizedBox(
-              height: screenSize.height / 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: screenSize.height / 2,
-                  width: screenSize.width / 3,
-                  child: Image.asset("assets/Images/man.png"),
-                ),
-                SizedBox(
-                  width: screenSize.width / 6,
-                ),
-                Container(
-                  height: screenSize.height / 2,
-                  width: screenSize.width / 3,
-                  child: Image.asset("assets/Images/woman.png"),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: screenSize.height / 15,
-            ),
-            Text(
-              "-Smart Retail-",
-              style: GoogleFonts.gloriaHallelujah(color: Colors.blue),
-            ),
-          ],
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/Images/background.jpeg"),
+                fit: BoxFit.cover),
+          ),
+          child: Column(
+            children: [
+              Text(
+                "Choose Your Gender",
+                style: GoogleFonts.gloriaHallelujah(
+                    fontSize: screenSize.width / 10,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: screenSize.height / 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustButton(
+                    screenSize: screenSize,
+                    textColor: Colors.white,
+                    borderColor: Colors.blue,
+                    fillColor: Colors.blue,
+                    heightDiv: screenSize.width / 36,
+                    widthDiv: screenSize.width / 163.6363636,
+                    text: "Man",
+                    onTap: () {
+                      setState(() {
+                        man = true;
+                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CameraScreen(
+                                    man: man,
+                                  )));
+                    },
+                  ),
+                  SizedBox(
+                    width: screenSize.width / 20,
+                  ),
+                  CustButton(
+                    screenSize: screenSize,
+                    textColor: Colors.white,
+                    borderColor: Colors.blue,
+                    fillColor: Colors.blue,
+                    heightDiv: screenSize.width / 36, //10
+                    widthDiv: screenSize.width / 163.6363636, //2.2
+                    text: "Woman",
+                    onTap: () {
+                      setState(() {
+                        man = false;
+                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CameraScreen(
+                                    man: man,
+                                  )));
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: screenSize.height / 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: screenSize.height / 2,
+                    width: screenSize.width / 3,
+                    child: Image.asset("assets/Images/man.png"),
+                  ),
+                  SizedBox(
+                    width: screenSize.width / 6,
+                  ),
+                  Container(
+                    height: screenSize.height / 2,
+                    width: screenSize.width / 3,
+                    child: Image.asset("assets/Images/woman.png"),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

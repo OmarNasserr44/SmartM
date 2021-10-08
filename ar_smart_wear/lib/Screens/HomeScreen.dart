@@ -24,16 +24,19 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Container(
           decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/Images/background.jpeg"),
+                  fit: BoxFit.cover),
               gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                // Colors.blue,
-                Colors.white,
-                Colors.white,
-                // Colors.yellow,
-                // Colors.greenAccent,
-              ])),
+                    // Colors.blue,
+                    Colors.white,
+                    Colors.white,
+                    // Colors.yellow,
+                    // Colors.greenAccent,
+                  ])),
           child: Center(
             child: Column(
               children: [
@@ -42,6 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 CustButton(
                   screenSize: screenSize,
+                  textColor: Colors.white,
+                  borderColor: Colors.blue,
+                  fillColor: Colors.blue,
                   text: "Start",
                   onTap: () {
                     Navigator.pushNamed(context, GenderScreen.id);

@@ -18,7 +18,9 @@ class BodyMeasurements extends StatefulWidget {
   final double rightShoulderXco;
   final double rightShoulderYco;
   final double topPositionedShirt;
-  final double distanceBetHipsAndFeet;
+  final double distanceBetHipsAndAnkle;
+  final double distanceBetFootAndAnkle;
+  final bool man;
 
   const BodyMeasurements({
     this.image,
@@ -30,26 +32,29 @@ class BodyMeasurements extends StatefulWidget {
     this.rightShoulderYco,
     this.topPositionedShirt,
     this.distanceBetTwoHips,
-    this.distanceBetHipsAndFeet,
+    this.distanceBetHipsAndAnkle,
+    this.distanceBetFootAndAnkle,
+    this.man,
   });
   @override
   _BodyMeasurementsState createState() => _BodyMeasurementsState(
-        image: image,
-        boundingBoxInPixels: boundingBoxInPixels,
-        distBet2Shoulders: distBet2Shoulders,
-        distBetLeftHipAndShoulder: distBetLeftHipAndShoulder,
-        distBetRightHipAndShoulder: distBetRightHipAndShoulder,
-        rightShoulderXco: rightShoulderXco,
-        rightShoulderYco: rightShoulderYco,
-        topPositionedShirt: topPositionedShirt,
-        distanceBetTwoHips: distanceBetTwoHips,
-        distanceBetHipsAndFeet: distanceBetHipsAndFeet,
-      );
+      image: image,
+      boundingBoxInPixels: boundingBoxInPixels,
+      distBet2Shoulders: distBet2Shoulders,
+      distBetLeftHipAndShoulder: distBetLeftHipAndShoulder,
+      distBetRightHipAndShoulder: distBetRightHipAndShoulder,
+      rightShoulderXco: rightShoulderXco,
+      rightShoulderYco: rightShoulderYco,
+      topPositionedShirt: topPositionedShirt,
+      distanceBetTwoHips: distanceBetTwoHips,
+      distanceBetHipsAndAnkle: distanceBetHipsAndAnkle,
+      distanceBetFootAndAnkle: distanceBetFootAndAnkle,
+      man: man);
 }
 
 class _BodyMeasurementsState extends State<BodyMeasurements> {
   _BodyMeasurementsState(
-      {this.distanceBetHipsAndFeet,
+      {this.distanceBetHipsAndAnkle,
       this.distanceBetTwoHips,
       this.topPositionedShirt,
       this.rightShoulderXco,
@@ -58,7 +63,9 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
       this.distBet2Shoulders,
       this.distBetLeftHipAndShoulder,
       this.distBetRightHipAndShoulder,
-      this.image});
+      this.image,
+      this.distanceBetFootAndAnkle,
+      this.man});
 
   final File image;
   final double distBet2Shoulders;
@@ -69,11 +76,13 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
   final double rightShoulderYco;
   final double topPositionedShirt;
   final double distanceBetTwoHips;
-  final double distanceBetHipsAndFeet;
+  final double distanceBetHipsAndAnkle;
+  final double distanceBetFootAndAnkle;
+  final bool man;
 
   //
   int height = 170;
-  double neck = 0;
+  double waist = 0;
   double chest = 0;
   double shoulder = 0;
   bool gotHeight = false;
@@ -96,119 +105,141 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
           style: GoogleFonts.gloriaHallelujah(fontSize: screenSize.width / 12),
         ),
       ),
-      body: SafeArea(
-        child: !gotHeight
-            ? Center(
-                child: Stack(
-                  children: [
-                    HeightSlider(
-                      height: height,
-                      onChange: (val) {
-                        setState(() {
-                          height = val;
-                        });
-                      },
-                      unit: 'cm', // optional
-                      maxHeight: 210,
-                      currentHeightTextColor: Colors.red,
-                    ),
-                    Positioned(
-                        left: screenSize.width / 12,
-                        top: screenSize.height / 15,
-                        child: CustButton(
-                          onTap: () {
-                            setState(() {
-                              chest = convertPixelsToCM(height,
-                                  boundingBoxInPixels, distBet2Shoulders);
-                              gotHeight = true;
-                            });
-                          },
-                          fillColor: Colors.blue,
-                          screenSize: screenSize,
-                          text: "Next",
-                          fontSize: screenSize.width / 14,
-                          textColor: Colors.white,
-                          heightDiv: screenSize.height / 60,
-                          widthDiv: screenSize.width / 120,
-                        )),
-                  ],
-                ),
-              )
-            : Container(
-                height: screenSize.height,
-                width: screenSize.width,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: screenSize.height / 25,
-                    ),
-                    ReportWidget(
-                        screenSize: screenSize,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("assets/Images/background.jpeg"),
+              fit: BoxFit.cover),
+        ),
+        child: SafeArea(
+          child: !gotHeight
+              ? Center(
+                  child: Stack(
+                    children: [
+                      HeightSlider(
+                        primaryColor: Colors.white,
+                        numberLineColor: Colors.white,
                         height: height,
-                        neck: neck,
-                        chest: chest,
-                        shoulder: shoulder,
-                        image: image),
-                    SizedBox(
-                      height: screenSize.height / 35,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustButton(
+                        onChange: (val) {
+                          setState(() {
+                            height = val;
+                          });
+                        },
+                        unit: 'cm', // optional
+                        maxHeight: 210,
+                        currentHeightTextColor: Colors.white,
+                      ),
+                      Positioned(
+                          left: screenSize.width / 12,
+                          top: screenSize.height / 15,
+                          child: CustButton(
+                            onTap: () {
+                              setState(() {
+                                chest = convertPixelsToCM(height,
+                                    boundingBoxInPixels, distBet2Shoulders);
+                                waist = convertPixelsToCM(height,
+                                    boundingBoxInPixels, distanceBetTwoHips);
+                                gotHeight = true;
+                              });
+                            },
+                            fillColor: Colors.white,
+                            screenSize: screenSize,
+                            text: "Next",
+                            borderColor: Colors.white,
+                            fontSize: screenSize.width / 14,
+                            textColor: Colors.blue,
+                            heightDiv: screenSize.height / 60,
+                            widthDiv: screenSize.width / 120,
+                          )),
+                    ],
+                  ),
+                )
+              : Container(
+                  height: screenSize.height,
+                  width: screenSize.width,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: screenSize.height / 25,
+                      ),
+                      ReportWidget(
                           screenSize: screenSize,
-                          onTap: () {
-                            setState(() {
-                              gotHeight = false;
-                            });
-                          },
-                          text: "Remeasure",
-                          heightDiv: screenSize.height / 90,
-                          widthDiv: screenSize.width / 160,
-                          fontSize: screenSize.width / 18,
-                        ),
-                        SizedBox(
-                          width: screenSize.width / 30,
-                        ),
-                        CustButton(
-                          screenSize: screenSize,
-                          onTap: () {
-                            setState(() {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => TryOutfits(
-                                            image: image,
-                                            distBet2Shoulders:
-                                                distBet2Shoulders,
-                                            distBetHipsAndShoulders:
-                                                distBetRightHipAndShoulder >
-                                                        distBetLeftHipAndShoulder
-                                                    ? distBetRightHipAndShoulder
-                                                    : distBetLeftHipAndShoulder,
-                                            rightShoulderXco: rightShoulderXco,
-                                            rightShoulderYco: rightShoulderYco,
-                                            boundingBoxInPixels:
-                                                boundingBoxInPixels,
-                                            topPositionedShirt:
-                                                topPositionedShirt,
-                                            distanceBetHipsAndFeet:
-                                                distanceBetHipsAndFeet,
-                                            distanceBetTwoHips:
-                                                distanceBetTwoHips,
-                                          )));
-                            });
-                          },
-                          text: "Try Outfits",
-                          heightDiv: screenSize.height / 90,
-                          widthDiv: screenSize.width / 160,
-                          fontSize: screenSize.width / 18,
-                        ),
-                      ],
-                    )
-                  ],
+                          height: height,
+                          waist: waist,
+                          chest: chest,
+                          image: image),
+                      SizedBox(
+                        height: screenSize.height / 35,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustButton(
+                            screenSize: screenSize,
+                            onTap: () {
+                              setState(() {
+                                gotHeight = false;
+                              });
+                            },
+                            text: "Remeasure",
+                            textColor: Colors.white,
+                            borderColor: Colors.blue,
+                            fillColor: Colors.blue,
+                            heightDiv: screenSize.height / 90,
+                            widthDiv: screenSize.width / 160,
+                            fontSize: screenSize.width / 18,
+                          ),
+                          SizedBox(
+                            width: screenSize.width / 30,
+                          ),
+                          CustButton(
+                            screenSize: screenSize,
+                            onTap: () {
+                              setState(() {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => TryOutfits(
+                                              image: image,
+                                              distBet2Shoulders:
+                                                  distBet2Shoulders,
+                                              distBetHipsAndShoulders:
+                                                  distBetRightHipAndShoulder >
+                                                          distBetLeftHipAndShoulder
+                                                      ? distBetRightHipAndShoulder
+                                                      : distBetLeftHipAndShoulder,
+                                              rightShoulderXco:
+                                                  rightShoulderXco,
+                                              rightShoulderYco:
+                                                  rightShoulderYco,
+                                              boundingBoxInPixels:
+                                                  boundingBoxInPixels,
+                                              topPositionedShirt:
+                                                  topPositionedShirt,
+                                              distanceBetHipsAndAnkle:
+                                                  distanceBetHipsAndAnkle,
+                                              distanceBetTwoHips:
+                                                  distanceBetTwoHips,
+                                              distanceBetFootAndAnkle:
+                                                  distanceBetFootAndAnkle,
+                                              man: man,
+                                            )));
+                              });
+                            },
+                            text: "Try Outfits",
+                            textColor: Colors.white,
+                            borderColor: Colors.blue,
+                            fillColor: Colors.blue,
+                            heightDiv: screenSize.height / 90,
+                            widthDiv: screenSize.width / 160,
+                            fontSize: screenSize.width / 18,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
+        ),
       ),
     );
   }

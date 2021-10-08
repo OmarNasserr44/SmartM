@@ -59,11 +59,15 @@ flutter:
     - assets/Images/menTop/open-jacket2.png
     - assets/Images/menTop/white-shirt.png
     - assets/Images/menBottom/black-p.png
-    - assets/Images/menBottom/black-p2.png
+    - assets/Images/womenTop/pinkJacket.png
+    - assets/Images/womenTop/blackShirt.png
+    - assets/Images/womenTop/yellowBlouse.png
+    - assets/Images/womenBottom/wBlackP.png
     - assets/tflite/ssd_mobilenet.tflite
     - assets/tflite/ssd_mobilenet.txt
     - assets/tflite/yolov2_tiny.tflite
     - assets/tflite/yolov2_tiny.txt
+    - assets/Images/background.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

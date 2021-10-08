@@ -23,13 +23,13 @@ class NumBelowText extends StatelessWidget {
           style: GoogleFonts.gloriaHallelujah(
               fontSize: screenSize.width / 13,
               fontWeight: FontWeight.bold,
-              color: Colors.blue[800]),
+              color: Colors.white),
         ),
         Text(
           "$height",
           style: GoogleFonts.gloriaHallelujah(
               fontSize: screenSize.width / 13,
-              color: Colors.blue[800],
+              color: Colors.white,
               fontWeight: FontWeight.bold),
         )
       ],

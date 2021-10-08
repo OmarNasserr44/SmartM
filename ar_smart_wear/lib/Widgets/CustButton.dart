@@ -11,8 +11,9 @@ class CustButton extends StatelessWidget {
     this.heightDiv = 8,
     this.widthDiv = 1.5,
     this.fillColor = Colors.transparent,
-    this.textColor = Colors.blue,
+    this.textColor = Colors.white,
     this.fontSize = 30,
+    this.borderColor = Colors.white,
   }) : super(key: key);
 
   final Size screenSize;
@@ -23,29 +24,34 @@ class CustButton extends StatelessWidget {
   final double widthDiv;
   final Color fillColor;
   final Color textColor;
+  final Color borderColor;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        height: screenSize.height / heightDiv,
-        width: screenSize.width / widthDiv,
-        decoration: BoxDecoration(
-          color: fillColor,
-          borderRadius: BorderRadius.circular(50),
-          border: Border.all(
-            color: Colors.blue,
-            width: 7,
+      child: Material(
+        elevation: 10,
+        borderRadius: BorderRadius.circular(50),
+        child: Container(
+          height: screenSize.height / heightDiv,
+          width: screenSize.width / widthDiv,
+          decoration: BoxDecoration(
+            color: fillColor,
+            borderRadius: BorderRadius.circular(50),
+            border: Border.all(
+              color: borderColor,
+              width: 7,
+            ),
           ),
-        ),
-        child: Center(
-          child: Text(
-            text,
-            overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.gloriaHallelujah(
-              fontSize: fontSize,
-              color: textColor,
+          child: Center(
+            child: Text(
+              text,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.gloriaHallelujah(
+                fontSize: fontSize,
+                color: textColor,
+              ),
             ),
           ),
         ),

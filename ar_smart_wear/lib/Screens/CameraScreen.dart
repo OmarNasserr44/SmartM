@@ -16,11 +16,16 @@ const String yolo = "Tiny YOLOv2";
 
 class CameraScreen extends StatefulWidget {
   static const id = 'CameraScreen';
+  final bool man;
+
+  const CameraScreen({this.man});
   @override
-  _CameraScreenState createState() => _CameraScreenState();
+  _CameraScreenState createState() => _CameraScreenState(man: man);
 }
 
 class _CameraScreenState extends State<CameraScreen> {
+  final bool man;
+
   String _model = ssd;
   File _image;
 
@@ -38,7 +43,8 @@ class _CameraScreenState extends State<CameraScreen> {
   double distanceBetLeftHipAndShoulderInPixels = 0;
   double distanceBetRightHipAndShoulderInPixels = 0;
   double distanceBetTwoHipsInPixels = 0;
-  double distanceBetHipsAndFeet = 0;
+  double distanceBetHipsAndAnkle = 0;
+  double distanceBetFootAndAnkle = 0;
   double boundingBoxHeightInPixels = 0;
   double boundingBoxWidthInPixels = 0;
 
@@ -47,6 +53,8 @@ class _CameraScreenState extends State<CameraScreen> {
 
   double leftPositionedShirt;
   double topPositionedShirt;
+
+  _CameraScreenState({this.man});
 
   @override
   void initState() {
@@ -158,7 +166,8 @@ class _CameraScreenState extends State<CameraScreen> {
 
     PoseLandmark leftKnee;
     PoseLandmark rightKnee;
-    PoseLandmark rightAnkle;
+    PoseLandmark leftFoot;
+    PoseLandmark rightFoot;
     PoseLandmark leftAnkle;
     for (Pose pose in poses) {
       // to access specific landmarks
@@ -171,7 +180,8 @@ class _CameraScreenState extends State<CameraScreen> {
       rightHipCoordinate = pose.landmarks[PoseLandmarkType.rightHip];
       leftKnee = pose.landmarks[PoseLandmarkType.leftKnee];
       rightKnee = pose.landmarks[PoseLandmarkType.rightKnee];
-      rightAnkle = pose.landmarks[PoseLandmarkType.rightAnkle];
+      leftFoot = pose.landmarks[PoseLandmarkType.leftFootIndex];
+      rightFoot = pose.landmarks[PoseLandmarkType.rightFootIndex];
       leftAnkle = pose.landmarks[PoseLandmarkType.leftAnkle];
     }
     print("RightHIP ${rightHipCoordinate.x}   ${rightHipCoordinate.y}");
@@ -187,6 +197,8 @@ class _CameraScreenState extends State<CameraScreen> {
         shirtLeftShoulderCoordinates.x,
         shirtRightShoulderCoordinates.y,
         shirtLeftShoulderCoordinates.y);
+
+    print("DIS $distanceBetween2ShouldersInPixels");
 
     //getting the distance between the start of the hip and the shoulder to determine the height of the container that
     //will contain the shirt
@@ -212,11 +224,16 @@ class _CameraScreenState extends State<CameraScreen> {
     //     rightHipCoordinate.x, leftHipCoordinate.y, rightHipCoordinate.y);
     distanceBetTwoHipsInPixels =
         distanceBet2Points(leftKnee.x, rightKnee.x, leftKnee.y, rightKnee.y);
-    print("DIIIIIS $distanceBetTwoHipsInPixels}");
 
     //
-    distanceBetHipsAndFeet = distanceBet2Points(
+    distanceBetHipsAndAnkle = distanceBet2Points(
         leftHipCoordinate.x, leftAnkle.x, leftHipCoordinate.y, leftAnkle.y);
+    //
+    distanceBetFootAndAnkle =
+        distanceBet2Points(leftFoot.x, leftAnkle.x, leftFoot.y, leftAnkle.y);
+
+    print(distanceBet2Points(leftFoot.x, rightFoot.x, leftFoot.y, rightFoot.y));
+    print("DIST FOOT ANKLE $distanceBetTwoHipsInPixels");
   }
 
   double distanceBet2Points(double x1, double x2, double y1, double y2) {
@@ -240,6 +257,7 @@ class _CameraScreenState extends State<CameraScreen> {
         leftPositionedShirt = re["rect"]["x"] * factorX;
         topPositionedShirt = re["rect"]["y"] * factorY;
       });
+      print("BoundingBoxWIDTH $boundingBoxWidthInPixels");
       return Positioned(
         left: re["rect"]["x"] * factorX,
         top: re["rect"]["y"] * factorY,
@@ -285,7 +303,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   style: GoogleFonts.gloriaHallelujah(
                       fontSize: size.width / 8,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue),
+                      color: Colors.white),
                 ),
               ),
             )
@@ -341,7 +359,9 @@ class _CameraScreenState extends State<CameraScreen> {
                               rightShoulderYco: shirtRightShoulderCoordinates.y,
                               topPositionedShirt: topPositionedShirt,
                               distanceBetTwoHips: distanceBetTwoHipsInPixels,
-                              distanceBetHipsAndFeet: distanceBetHipsAndFeet,
+                              distanceBetHipsAndAnkle: distanceBetHipsAndAnkle,
+                              distanceBetFootAndAnkle: distanceBetFootAndAnkle,
+                              man: man,
                             )));
               }
             },
@@ -351,6 +371,7 @@ class _CameraScreenState extends State<CameraScreen> {
             widthDiv: size.width / 110,
             fillColor: Colors.blue,
             textColor: Colors.white,
+            borderColor: Colors.blue,
           ),
           SizedBox(
             width: size.width / 25,
@@ -375,8 +396,15 @@ class _CameraScreenState extends State<CameraScreen> {
           ),
         ],
       ),
-      body: Stack(
-        children: stackChildren,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("assets/Images/background.jpeg"),
+              fit: BoxFit.cover),
+        ),
+        child: Stack(
+          children: stackChildren,
+        ),
       ),
     );
   }

@@ -14,30 +14,36 @@ class TryOutfits extends StatefulWidget {
   final double boundingBoxInPixels;
   final double topPositionedShirt;
   final double distanceBetTwoHips;
-  final double distanceBetHipsAndFeet;
+  final double distanceBetHipsAndAnkle;
+  final double distanceBetFootAndAnkle;
+  final bool man;
 
-  const TryOutfits(
-      {this.image,
-      this.distBet2Shoulders,
-      this.distBetHipsAndShoulders,
-      this.rightShoulderXco,
-      this.rightShoulderYco,
-      this.boundingBoxInPixels,
-      this.topPositionedShirt,
-      this.distanceBetTwoHips,
-      this.distanceBetHipsAndFeet});
+  const TryOutfits({
+    this.image,
+    this.distBet2Shoulders,
+    this.distBetHipsAndShoulders,
+    this.rightShoulderXco,
+    this.rightShoulderYco,
+    this.boundingBoxInPixels,
+    this.topPositionedShirt,
+    this.distanceBetTwoHips,
+    this.distanceBetHipsAndAnkle,
+    this.distanceBetFootAndAnkle,
+    this.man = true,
+  });
   @override
   _TryOutfitsState createState() => _TryOutfitsState(
-        image: image,
-        distBet2Shoulders: distBet2Shoulders,
-        distBetHipsAndShoulders: distBetHipsAndShoulders,
-        rightShoulderYco: rightShoulderYco,
-        rightShoulderXco: rightShoulderXco,
-        boundingBoxInPixels: boundingBoxInPixels,
-        topPositionedShirt: topPositionedShirt,
-        distanceBetTwoHips: distanceBetTwoHips,
-        distanceBetHipsAndFeet: distanceBetHipsAndFeet,
-      );
+      image: image,
+      distBet2Shoulders: distBet2Shoulders,
+      distBetHipsAndShoulders: distBetHipsAndShoulders,
+      rightShoulderYco: rightShoulderYco,
+      rightShoulderXco: rightShoulderXco,
+      boundingBoxInPixels: boundingBoxInPixels,
+      topPositionedShirt: topPositionedShirt,
+      distanceBetTwoHips: distanceBetTwoHips,
+      distanceBetHipsAndAnkle: distanceBetHipsAndAnkle,
+      distanceBetFootAndAnkle: distanceBetFootAndAnkle,
+      man: man);
 }
 
 class _TryOutfitsState extends State<TryOutfits> {
@@ -50,7 +56,9 @@ class _TryOutfitsState extends State<TryOutfits> {
   final double boundingBoxInPixels;
   final double topPositionedShirt;
   final double distanceBetTwoHips;
-  final double distanceBetHipsAndFeet;
+  final double distanceBetHipsAndAnkle;
+  final double distanceBetFootAndAnkle;
+  final bool man;
 
   //since google pose detection wasn't accurate in positioning the landmark exactly on the shoulders specially the right shoulder which
   //we are interested in as we take it as our reference to position the shirt to start from the detected person shoulders
@@ -61,12 +69,20 @@ class _TryOutfitsState extends State<TryOutfits> {
   //are almost the same at any standing person, therefore I figured out a constant which is that 70px divided by the height of the bounding
   //box, now if we multiplied it with any bounding box height it will give us the estimated distance between the top of the head of the
   //detected person and his shoulders
-  double factoredH(double h) {
+  double factoredH({double h}) {
     return ((70 / 528.2392964848375) * h) + topPositionedShirt;
   }
 
+  double pantsFactor(double h) {
+    return (30 / 532.9664686902076) * h;
+  }
+
+  double pantsLeftPosFactor(double h) {
+    return (86 / 229.7969812291717) * h;
+  }
+
   _TryOutfitsState(
-      {this.distanceBetHipsAndFeet,
+      {this.distanceBetHipsAndAnkle,
       this.distanceBetTwoHips,
       this.topPositionedShirt,
       this.boundingBoxInPixels,
@@ -74,16 +90,18 @@ class _TryOutfitsState extends State<TryOutfits> {
       this.rightShoulderYco,
       this.distBetHipsAndShoulders,
       this.distBet2Shoulders,
-      this.image});
+      this.image,
+      this.distanceBetFootAndAnkle,
+      this.man});
 
   String changeableOutfit = "assets/Images/emptyPNG.png";
   String pants = "assets/Images/emptyPNG.png";
 
   @override
   Widget build(BuildContext context) {
-    print("hipsandfeet $distanceBetHipsAndFeet");
-    print("2shoulders $distBet2Shoulders");
-    print("2Hips $distanceBetTwoHips");
+    print("hips $distanceBetTwoHips");
+    print("hipsAndAnk $distanceBetHipsAndAnkle");
+    print("footAndAnk $distanceBetFootAndAnkle");
     var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -125,23 +143,44 @@ class _TryOutfitsState extends State<TryOutfits> {
                                 size: screenSize.width / 8,
                               ),
                             )),
+                        man
+                            ? Positioned(
+                                left: rightShoulderXco +
+                                    ((distBet2Shoulders - distanceBetTwoHips) /
+                                        2),
+                                top: factoredH(h: boundingBoxInPixels) +
+                                    distBetHipsAndShoulders -
+                                    pantsFactor(boundingBoxInPixels),
+                                child: Container(
+                                  child: Image.asset(
+                                    pants,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  height: distanceBetHipsAndAnkle -
+                                      distanceBetFootAndAnkle,
+                                  width: distanceBetTwoHips,
+                                ),
+                              )
+                            : Positioned(
+                                left: rightShoulderXco +
+                                    ((distBet2Shoulders -
+                                            pantsLeftPosFactor(
+                                                distanceBetHipsAndAnkle)) /
+                                        2),
+                                top: factoredH(h: boundingBoxInPixels) +
+                                    distBetHipsAndShoulders -
+                                    pantsFactor(boundingBoxInPixels),
+                                child: Container(
+                                    child: Image.asset(
+                                      pants,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    height: distanceBetHipsAndAnkle),
+                                // width: 86,
+                              ),
                         Positioned(
                           left: rightShoulderXco,
-                          top: factoredH(boundingBoxInPixels) +
-                              distBetHipsAndShoulders -
-                              30,
-                          child: Container(
-                            child: Image.asset(
-                              pants,
-                              fit: BoxFit.cover,
-                            ),
-                            height: distanceBetHipsAndFeet,
-                            width: distanceBetTwoHips,
-                          ),
-                        ),
-                        Positioned(
-                          left: rightShoulderXco,
-                          top: factoredH(boundingBoxInPixels),
+                          top: factoredH(h: boundingBoxInPixels),
                           child: Container(
                             child: Image.asset(
                               changeableOutfit,
@@ -165,13 +204,18 @@ class _TryOutfitsState extends State<TryOutfits> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              changeableOutfit =
-                                  "assets/Images/menTop/open-jacket2.png";
+                              man
+                                  ? changeableOutfit =
+                                      "assets/Images/menTop/open-jacket2.png"
+                                  : changeableOutfit =
+                                      "assets/Images/womenTop/yellowBlouse.png";
                             });
                           },
                           child: PreviewBox(
                             screenSize: screenSize,
-                            imagePath: "assets/Images/menTop/open-jacket2.png",
+                            imagePath: man
+                                ? "assets/Images/menTop/open-jacket2.png"
+                                : "assets/Images/womenTop/yellowBlouse.png",
                           ),
                         ),
                         SizedBox(
@@ -180,13 +224,18 @@ class _TryOutfitsState extends State<TryOutfits> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              changeableOutfit =
-                                  "assets/Images/menTop/white-shirt.png";
+                              man
+                                  ? changeableOutfit =
+                                      "assets/Images/menTop/white-shirt.png"
+                                  : changeableOutfit =
+                                      "assets/Images/womenTop/pinkJacket.png";
                             });
                           },
                           child: PreviewBox(
                             screenSize: screenSize,
-                            imagePath: "assets/Images/menTop/white-shirt.png",
+                            imagePath: man
+                                ? "assets/Images/menTop/white-shirt.png"
+                                : "assets/Images/womenTop/pinkJacket.png",
                           ),
                         ),
                         SizedBox(
@@ -195,13 +244,18 @@ class _TryOutfitsState extends State<TryOutfits> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              changeableOutfit =
-                                  "assets/Images/menTop/jacket2.png";
+                              man
+                                  ? changeableOutfit =
+                                      "assets/Images/menTop/jacket2.png"
+                                  : changeableOutfit =
+                                      "assets/Images/womenTop/blackShirt.png";
                             });
                           },
                           child: PreviewBox(
                             screenSize: screenSize,
-                            imagePath: "assets/Images/menTop/jacket2.png",
+                            imagePath: man
+                                ? "assets/Images/menTop/jacket2.png"
+                                : "assets/Images/womenTop/blackShirt.png",
                           ),
                         ),
                       ],
@@ -212,26 +266,18 @@ class _TryOutfitsState extends State<TryOutfits> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              pants = "assets/Images/menBottom/black-p2.png";
+                              man
+                                  ? pants =
+                                      "assets/Images/menBottom/black-p.png"
+                                  : pants =
+                                      "assets/Images/womenBottom/wBlackP.png";
                             });
                           },
                           child: PreviewBox(
                             screenSize: screenSize,
-                            imagePath: "assets/Images/menBottom/black-p2.png",
-                          ),
-                        ),
-                        SizedBox(
-                          width: screenSize.width / 40,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              pants = "assets/Images/menBottom/black-p.png";
-                            });
-                          },
-                          child: PreviewBox(
-                            screenSize: screenSize,
-                            imagePath: "assets/Images/menBottom/black-p.png",
+                            imagePath: man
+                                ? "assets/Images/menBottom/black-p.png"
+                                : "assets/Images/womenBottom/wBlackP.png",
                           ),
                         ),
                       ],

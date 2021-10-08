@@ -8,17 +8,15 @@ class ReportWidget extends StatelessWidget {
     Key key,
     @required this.screenSize,
     @required this.height,
-    @required this.neck,
+    @required this.waist,
     @required this.chest,
-    @required this.shoulder,
     @required this.image,
   }) : super(key: key);
 
   final Size screenSize;
   final int height;
-  final double neck;
+  final double waist;
   final double chest;
-  final double shoulder;
   final File image;
 
   @override
@@ -38,16 +36,15 @@ class ReportWidget extends StatelessWidget {
                 height: height.toDouble(),
                 text: "Height",
               ),
-              NumBelowText(screenSize: screenSize, height: neck, text: "Neck"),
+              NumBelowText(
+                screenSize: screenSize,
+                height: waist,
+                text: "Waist",
+              ),
               NumBelowText(
                 screenSize: screenSize,
                 height: chest,
                 text: "chest",
-              ),
-              NumBelowText(
-                screenSize: screenSize,
-                height: shoulder,
-                text: "Shoulder",
               ),
             ],
           ),
