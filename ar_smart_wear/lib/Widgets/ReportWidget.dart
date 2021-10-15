@@ -11,6 +11,7 @@ class ReportWidget extends StatelessWidget {
     @required this.waist,
     @required this.chest,
     @required this.image,
+    this.legLength,
   }) : super(key: key);
 
   final Size screenSize;
@@ -18,11 +19,12 @@ class ReportWidget extends StatelessWidget {
   final double waist;
   final double chest;
   final File image;
+  final double legLength;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: screenSize.height / 1.5,
+      height: screenSize.height / 1.6,
       width: screenSize.width / 1.05,
       child: Row(
         children: [
@@ -45,6 +47,11 @@ class ReportWidget extends StatelessWidget {
                 screenSize: screenSize,
                 height: chest,
                 text: "chest",
+              ),
+              NumBelowText(
+                screenSize: screenSize,
+                height: legLength,
+                text: "Leg",
               ),
             ],
           ),

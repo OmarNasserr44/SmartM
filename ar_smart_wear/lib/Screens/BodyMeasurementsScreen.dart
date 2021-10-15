@@ -117,6 +117,7 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
                   child: Stack(
                     children: [
                       HeightSlider(
+                        sliderCircleColor: Colors.purple,
                         primaryColor: Colors.white,
                         numberLineColor: Colors.white,
                         height: height,
@@ -142,12 +143,12 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
                                 gotHeight = true;
                               });
                             },
-                            fillColor: Colors.white,
+                            borderColor: Colors.purple,
+                            fillColor: Colors.purple,
                             screenSize: screenSize,
                             text: "Next",
-                            borderColor: Colors.white,
                             fontSize: screenSize.width / 14,
-                            textColor: Colors.blue,
+                            textColor: Colors.white,
                             heightDiv: screenSize.height / 60,
                             widthDiv: screenSize.width / 120,
                           )),
@@ -163,13 +164,12 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
                         height: screenSize.height / 25,
                       ),
                       ReportWidget(
-                          screenSize: screenSize,
-                          height: height,
-                          waist: waist,
-                          chest: chest,
-                          image: image),
-                      SizedBox(
-                        height: screenSize.height / 35,
+                        screenSize: screenSize,
+                        height: height,
+                        waist: waist,
+                        chest: chest,
+                        legLength: distanceBetHipsAndAnkle.ceilToDouble(),
+                        image: image,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -183,10 +183,10 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
                             },
                             text: "Remeasure",
                             textColor: Colors.white,
-                            borderColor: Colors.blue,
-                            fillColor: Colors.blue,
-                            heightDiv: screenSize.height / 90,
-                            widthDiv: screenSize.width / 160,
+                            borderColor: Colors.purple,
+                            fillColor: Colors.purple,
+                            heightDiv: screenSize.height / 70,
+                            widthDiv: screenSize.width / 140,
                             fontSize: screenSize.width / 18,
                           ),
                           SizedBox(
@@ -228,10 +228,10 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
                             },
                             text: "Try Outfits",
                             textColor: Colors.white,
-                            borderColor: Colors.blue,
-                            fillColor: Colors.blue,
-                            heightDiv: screenSize.height / 90,
-                            widthDiv: screenSize.width / 160,
+                            borderColor: Colors.purple,
+                            fillColor: Colors.purple,
+                            heightDiv: screenSize.height / 70,
+                            widthDiv: screenSize.width / 140,
                             fontSize: screenSize.width / 18,
                           ),
                         ],

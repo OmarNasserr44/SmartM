@@ -46,8 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 CustButton(
                   screenSize: screenSize,
                   textColor: Colors.white,
-                  borderColor: Colors.blue,
-                  fillColor: Colors.blue,
+                  borderColor: Colors.purple,
+                  fillColor: Colors.purple,
                   text: "Start",
                   onTap: () {
                     Navigator.pushNamed(context, GenderScreen.id);

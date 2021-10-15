@@ -326,75 +326,83 @@ class _CameraScreenState extends State<CameraScreen> {
           style: GoogleFonts.gloriaHallelujah(fontSize: size.width / 12),
         ),
       ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CustButton(
-            screenSize: size,
-            onTap: () {
-              if (_image == null) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  backgroundColor: Colors.blue,
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(30))),
-                  content: Text(
-                    "Please Upload an Image First",
-                    style: GoogleFonts.gloriaHallelujah(),
-                  ),
-                ));
-              } else {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => BodyMeasurements(
-                              image: _image,
-                              distBet2Shoulders: boundingBoxWidthInPixels,
-                              distBetLeftHipAndShoulder:
-                                  distanceBetLeftHipAndShoulderInPixels,
-                              distBetRightHipAndShoulder:
-                                  distanceBetRightHipAndShoulderInPixels,
-                              boundingBoxInPixels: boundingBoxHeightInPixels,
-                              rightShoulderXco: leftPositionedShirt,
-                              rightShoulderYco: shirtRightShoulderCoordinates.y,
-                              topPositionedShirt: topPositionedShirt,
-                              distanceBetTwoHips: distanceBetTwoHipsInPixels,
-                              distanceBetHipsAndAnkle: distanceBetHipsAndAnkle,
-                              distanceBetFootAndAnkle: distanceBetFootAndAnkle,
-                              man: man,
-                            )));
-              }
-            },
-            text: "Next",
-            fontSize: size.width / 13,
-            heightDiv: size.height / 70,
-            widthDiv: size.width / 110,
-            fillColor: Colors.blue,
-            textColor: Colors.white,
-            borderColor: Colors.blue,
-          ),
-          SizedBox(
-            width: size.width / 25,
-          ),
-          FloatingActionButton(
-            child: Icon(Icons.camera),
-            onPressed: () {
-              selectFromImagePicker(true);
-            },
-            heroTag: "btn2",
-          ),
-          SizedBox(
-            width: size.width / 25,
-          ),
-          FloatingActionButton(
-            heroTag: "btn1",
-            child: Icon(Icons.image),
-            tooltip: "Pick Image from gallery",
-            onPressed: () {
-              selectFromImagePicker(false);
-            },
-          ),
-        ],
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 60),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustButton(
+              screenSize: size,
+              onTap: () {
+                if (_image == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Colors.blue,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30))),
+                    content: Text(
+                      "Please Upload an Image First",
+                      style: GoogleFonts.gloriaHallelujah(),
+                    ),
+                  ));
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BodyMeasurements(
+                                image: _image,
+                                distBet2Shoulders: boundingBoxWidthInPixels,
+                                distBetLeftHipAndShoulder:
+                                    distanceBetLeftHipAndShoulderInPixels,
+                                distBetRightHipAndShoulder:
+                                    distanceBetRightHipAndShoulderInPixels,
+                                boundingBoxInPixels: boundingBoxHeightInPixels,
+                                rightShoulderXco: leftPositionedShirt,
+                                rightShoulderYco:
+                                    shirtRightShoulderCoordinates.y,
+                                topPositionedShirt: topPositionedShirt,
+                                distanceBetTwoHips: distanceBetTwoHipsInPixels,
+                                distanceBetHipsAndAnkle:
+                                    distanceBetHipsAndAnkle,
+                                distanceBetFootAndAnkle:
+                                    distanceBetFootAndAnkle,
+                                man: man,
+                              )));
+                }
+              },
+              text: "<-",
+              fontSize: size.width / 13,
+              heightDiv: size.height / 70,
+              widthDiv: size.width / 60,
+              borderColor: Colors.purple,
+              fillColor: Colors.purple,
+              textColor: Colors.white,
+            ),
+            SizedBox(
+              width: size.width / 20,
+            ),
+            FloatingActionButton(
+              child: Icon(Icons.camera),
+              backgroundColor: Colors.purple,
+              onPressed: () {
+                selectFromImagePicker(true);
+              },
+              heroTag: "btn2",
+            ),
+            SizedBox(
+              width: size.width / 25,
+            ),
+            FloatingActionButton(
+              backgroundColor: Colors.purple,
+              heroTag: "btn1",
+              child: Icon(Icons.image),
+              tooltip: "Pick Image from gallery",
+              onPressed: () {
+                selectFromImagePicker(false);
+              },
+            ),
+          ],
+        ),
       ),
       body: Container(
         decoration: BoxDecoration(

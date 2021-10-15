@@ -41,10 +41,10 @@ class _GenderScreenState extends State<GenderScreen> {
                   CustButton(
                     screenSize: screenSize,
                     textColor: Colors.white,
-                    borderColor: Colors.blue,
-                    fillColor: Colors.blue,
+                    borderColor: Colors.purple,
+                    fillColor: Colors.purple,
                     heightDiv: screenSize.width / 36,
-                    widthDiv: screenSize.width / 163.6363636,
+                    widthDiv: screenSize.width / 130,
                     text: "Man",
                     onTap: () {
                       setState(() {
@@ -64,10 +64,10 @@ class _GenderScreenState extends State<GenderScreen> {
                   CustButton(
                     screenSize: screenSize,
                     textColor: Colors.white,
-                    borderColor: Colors.blue,
-                    fillColor: Colors.blue,
-                    heightDiv: screenSize.width / 36, //10
-                    widthDiv: screenSize.width / 163.6363636, //2.2
+                    borderColor: Colors.purple,
+                    fillColor: Colors.purple,
+                    heightDiv: screenSize.width / 36,
+                    widthDiv: screenSize.width / 130,
                     text: "Woman",
                     onTap: () {
                       setState(() {

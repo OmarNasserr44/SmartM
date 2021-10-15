@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ar_smart_wear/Screens/chechout.dart';
 import 'package:ar_smart_wear/Widgets/ItemsPreviewBox.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -129,19 +130,42 @@ class _TryOutfitsState extends State<TryOutfits> {
                         Positioned(
                             right: screenSize.width / 30,
                             top: screenSize.height / 100,
-                            child: FloatingActionButton(
-                              onPressed: () {
-                                setState(() {
-                                  changeableOutfit =
-                                      "assets/Images/emptyPNG.png";
-                                  pants = "assets/Images/emptyPNG.png";
-                                });
-                              },
-                              backgroundColor: Colors.red,
-                              child: Icon(
-                                Icons.cancel_outlined,
-                                size: screenSize.width / 8,
-                              ),
+                            child: Row(
+                              children: [
+                                FloatingActionButton(
+                                  heroTag: "FAB1",
+                                  onPressed: () {
+                                    setState(() {
+                                      changeableOutfit =
+                                          "assets/Images/emptyPNG.png";
+                                      pants = "assets/Images/emptyPNG.png";
+                                    });
+                                  },
+                                  backgroundColor: Colors.red,
+                                  child: Icon(
+                                    Icons.cancel_outlined,
+                                    size: screenSize.width / 8,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: screenSize.width / 20,
+                                ),
+                                FloatingActionButton(
+                                  heroTag: "FAB2",
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                CheckOutScreen()));
+                                  },
+                                  backgroundColor: Colors.purple,
+                                  child: Icon(
+                                    Icons.shopping_cart,
+                                    size: screenSize.width / 10,
+                                  ),
+                                ),
+                              ],
                             )),
                         man
                             ? Positioned(
