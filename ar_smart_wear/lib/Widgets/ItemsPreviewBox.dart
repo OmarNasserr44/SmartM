@@ -19,7 +19,8 @@ class PreviewBox extends StatelessWidget {
         imagePath,
       ),
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.blue, width: screenSize.width / 70)),
+          border:
+              Border.all(color: Colors.purple, width: screenSize.width / 70)),
     );
   }
 }

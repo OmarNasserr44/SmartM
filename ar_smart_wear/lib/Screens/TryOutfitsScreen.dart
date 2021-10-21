@@ -112,6 +112,7 @@ class _TryOutfitsState extends State<TryOutfits> {
           "Try OutFits",
           style: GoogleFonts.gloriaHallelujah(fontSize: screenSize.width / 12),
         ),
+        backgroundColor: Colors.purple,
       ),
       body: Container(
         child: Center(

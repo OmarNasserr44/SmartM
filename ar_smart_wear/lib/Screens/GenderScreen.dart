@@ -29,7 +29,7 @@ class _GenderScreenState extends State<GenderScreen> {
                 "Choose Your Gender",
                 style: GoogleFonts.gloriaHallelujah(
                     fontSize: screenSize.width / 10,
-                    color: Colors.white,
+                    color: Colors.purple,
                     fontWeight: FontWeight.bold),
               ),
               SizedBox(

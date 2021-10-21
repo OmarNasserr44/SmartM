@@ -325,6 +325,7 @@ class _CameraScreenState extends State<CameraScreen> {
           "Pick an Image",
           style: GoogleFonts.gloriaHallelujah(fontSize: size.width / 12),
         ),
+        backgroundColor: Colors.purple,
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 60),
@@ -370,10 +371,10 @@ class _CameraScreenState extends State<CameraScreen> {
                               )));
                 }
               },
-              text: "<-",
+              text: "Next",
               fontSize: size.width / 13,
               heightDiv: size.height / 70,
-              widthDiv: size.width / 60,
+              widthDiv: size.width / 80,
               borderColor: Colors.purple,
               fillColor: Colors.purple,
               textColor: Colors.white,

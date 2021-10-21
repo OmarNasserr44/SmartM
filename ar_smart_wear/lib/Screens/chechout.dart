@@ -1,3 +1,4 @@
+import 'package:ar_smart_wear/Widgets/CustButton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,6 +18,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           "Check Out",
           style: GoogleFonts.gloriaHallelujah(fontSize: screenSize.width / 12),
         ),
+        backgroundColor: Colors.purple,
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -28,6 +30,18 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              CustButton(
+                screenSize: screenSize,
+                textColor: Colors.white,
+                borderColor: Colors.purple,
+                fillColor: Colors.purple,
+                heightDiv: screenSize.width / 36,
+                widthDiv: screenSize.width / 130,
+                text: "Edit",
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
               Text(
                 "Total Amount",
                 style: GoogleFonts.gloriaHallelujah(
@@ -59,7 +73,10 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   color: Colors.white,
                 ),
               ),
-              Text("Order No: 234211")
+              Text("Order No: 234211"),
+              SizedBox(
+                height: screenSize.height / 6,
+              )
             ],
           ),
         ),

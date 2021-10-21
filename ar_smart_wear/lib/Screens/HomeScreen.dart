@@ -17,9 +17,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Smart Retail",
+          "Smart M",
           style: GoogleFonts.gloriaHallelujah(fontSize: screenSize.width / 12),
         ),
+        backgroundColor: Colors.purple,
         centerTitle: true,
       ),
       body: Container(
@@ -41,7 +42,20 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: [
                 SizedBox(
-                  height: screenSize.height / 1.8,
+                  height: screenSize.height / 5,
+                ),
+                Container(
+                  height: screenSize.height / 6,
+                  width: screenSize.width / 1.4,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(60),
+                    image: DecorationImage(
+                        image: AssetImage("assets/Images/logo.jpg"),
+                        fit: BoxFit.cover),
+                  ),
+                ),
+                SizedBox(
+                  height: screenSize.height / 5.2,
                 ),
                 CustButton(
                   screenSize: screenSize,

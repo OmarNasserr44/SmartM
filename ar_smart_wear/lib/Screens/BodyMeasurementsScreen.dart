@@ -104,6 +104,7 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
           "Size Report",
           style: GoogleFonts.gloriaHallelujah(fontSize: screenSize.width / 12),
         ),
+        backgroundColor: Colors.purple,
       ),
       body: Container(
         decoration: BoxDecoration(
