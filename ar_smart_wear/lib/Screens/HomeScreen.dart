@@ -15,18 +15,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Smart M",
-          style: GoogleFonts.gloriaHallelujah(fontSize: screenSize.width / 12),
-        ),
-        backgroundColor: Colors.purple,
-        centerTitle: true,
-      ),
       body: Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/Images/background.jpeg"),
+                  image: AssetImage("assets/Images/homePageBackground.jpg"),
                   fit: BoxFit.cover),
               gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -42,20 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: [
                 SizedBox(
-                  height: screenSize.height / 5,
-                ),
-                Container(
-                  height: screenSize.height / 6,
-                  width: screenSize.width / 1.4,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(60),
-                    image: DecorationImage(
-                        image: AssetImage("assets/Images/logo.jpg"),
-                        fit: BoxFit.cover),
-                  ),
-                ),
-                SizedBox(
-                  height: screenSize.height / 5.2,
+                  height: screenSize.height / 1.5,
                 ),
                 CustButton(
                   screenSize: screenSize,

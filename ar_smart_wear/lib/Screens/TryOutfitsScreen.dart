@@ -72,6 +72,7 @@ class _TryOutfitsState extends State<TryOutfits> {
   //detected person and his shoulders
   double factoredH({double h}) {
     return ((70 / 528.2392964848375) * h) + topPositionedShirt;
+    // return ((70 / 528.2392964848375) * h);
   }
 
   double pantsFactor(double h) {
@@ -100,9 +101,8 @@ class _TryOutfitsState extends State<TryOutfits> {
 
   @override
   Widget build(BuildContext context) {
-    print("hips $distanceBetTwoHips");
-    print("hipsAndAnk $distanceBetHipsAndAnkle");
-    print("footAndAnk $distanceBetFootAndAnkle");
+    print("bound $boundingBoxInPixels");
+    print("bound $topPositionedShirt");
     var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(

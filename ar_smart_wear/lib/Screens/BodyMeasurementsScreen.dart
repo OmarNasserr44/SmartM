@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:height_slider/height_slider.dart';
+import 'package:weight_slider/weight_slider.dart';
 
 class BodyMeasurements extends StatefulWidget {
   static const id = "Body Measurements";
@@ -85,6 +86,7 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
   double waist = 0;
   double chest = 0;
   double shoulder = 0;
+  int weight = 60;
   bool gotHeight = false;
   //
 
@@ -132,6 +134,22 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
                         currentHeightTextColor: Colors.white,
                       ),
                       Positioned(
+                        top: screenSize.height / 5,
+                        left: screenSize.width / 4,
+                        child: Container(
+                          width: screenSize.width / 2,
+                          height: screenSize.height / 15,
+                          child: WeightSlider(
+                            weight: weight,
+                            minWeight: 40,
+                            maxWeight: 130,
+                            onChange: (val) =>
+                                setState(() => this.weight = val),
+                            unit: 'kg', // optional
+                          ),
+                        ),
+                      ),
+                      Positioned(
                           left: screenSize.width / 12,
                           top: screenSize.height / 15,
                           child: CustButton(
@@ -169,8 +187,8 @@ class _BodyMeasurementsState extends State<BodyMeasurements> {
                         height: height,
                         waist: waist,
                         chest: chest,
-                        legLength: distanceBetHipsAndAnkle.ceilToDouble(),
                         image: image,
+                        weight: weight,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

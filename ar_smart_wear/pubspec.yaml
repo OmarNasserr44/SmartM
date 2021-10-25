@@ -33,6 +33,7 @@ dependencies:
   tflite: ^1.1.2
   height_slider: ^1.3.2
   google_ml_kit: ^0.7.2
+  weight_slider: ^1.2.2
 
 
 dev_dependencies:
@@ -54,6 +55,7 @@ flutter:
   assets:
     - assets/Images/man.png
     - assets/Images/logo.jpg
+    - assets/Images/homePageBackground.jpg
     - assets/Images/woman.png
     - assets/Images/emptyPNG.png
     - assets/Images/menTop/jacket2.png
