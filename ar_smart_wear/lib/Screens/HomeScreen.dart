@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Container(
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/Images/homePageBackground.jpg"),
+                  image: AssetImage("assets/Images/homePageBackground.jpeg"),
                   fit: BoxFit.cover),
               gradient: LinearGradient(
                   begin: Alignment.topLeft,
